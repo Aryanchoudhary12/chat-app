@@ -1,0 +1,23 @@
+export const themes = [
+  "dark",
+  "light",
+  "cupcake",
+  "bumblebee",
+  "emrald",
+  "corporate",
+  "synthwave",
+  "retro",
+  "cyberpunk",
+  "valentine",
+  "halloween",
+  "forest",
+  "aqua",
+  "lofi",
+  "pastel",
+  "dracula",
+  "night",
+  "coffee",
+  "dim",
+  "sunset",
+  "abyss"
+];
