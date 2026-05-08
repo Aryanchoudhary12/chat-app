@@ -1,17 +1,17 @@
 import React, { useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { Image, Send, X } from "lucide-react";
 import toast from "react-hot-toast";
 import { useChatStore } from "../store/useChatStore";
 function MessageInput() {
   const [imagePreview, setImagePreview] = useState(null);
   const inputref = useRef(null);
-  const { register, watch } = useForm({
-  defaultValues: {
-    text: "",
-  },
-});
-  const text = watch("text");
+  const { register, control, reset } = useForm({
+    defaultValues: {
+      text: "",
+    },
+  });
+  const text = useWatch({ control, name: "text" });
   const { sendMessages } = useChatStore();
   const handleChange = (e) => {
     const file = e.target.files[0];
@@ -36,15 +36,24 @@ function MessageInput() {
         text,
         image: imagePreview,
       });
-      toast.success("Message sent successfully");
-      reset();
       setImagePreview(null);
-      if (inputref.current) inputref.current.value = "";
+      if (inputref.current) {
+        inputref.current.value = "";
+      }
+      reset({ text: "" });
+      toast.success("Message sent successfully");
     } catch (error) {
       console.error("Failed to send message", error);
-      toast.error("Failed to send message")
+      toast.error("Failed to send message");
+    } finally {
+      setImagePreview(null);
+      if (inputref.current) {
+        inputref.current.value = "";
+      }
+      reset({ text: "" });
     }
   };
+  console.log(imagePreview);
   return (
     <div className="p-4 w-full">
       {imagePreview && (
@@ -73,6 +82,7 @@ function MessageInput() {
             {...register("text")}
           />
           <input
+            key={imagePreview ? "image-selected" : "no-image"}
             type="file"
             accept="image/*"
             className="hidden"

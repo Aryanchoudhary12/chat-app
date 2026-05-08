@@ -5,8 +5,8 @@ import messageRoutes from "./routes/message.route.js"
 import { connectDB } from "./lib/db.js";
 import cookieParser from "cookie-parser";
 import cors from "cors"
+import {app,server} from "./lib/socket.js"
 dotenv.config();
-const app = express();
 const PORT = process.env.PORT;
 
 app.use(express.json({ limit: "10mb" }));
@@ -25,7 +25,7 @@ app.use("/", (req, res) => {
   res.send("Hello World");
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
   connectDB();
 });

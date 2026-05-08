@@ -1,4 +1,5 @@
 import cloudinary from "../lib/cloudinary.js";
+import { getReceiverSocket, io } from "../lib/socket.js";
 import Message from "../models/message.model.js";
 import User from "../models/user.model.js";
 export const getUserForSidebar = async (req, res) => {
@@ -47,6 +48,10 @@ export const sendMessages = async (req, res) => {
     });
     await newMessage.save();
     //realtime functionality goes there
+    const receiverSocket = getReceiverSocket(recieverId);
+    if(receiverSocket){
+      io.to(receiverSocket).emit("newMessage",newMessage);
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });

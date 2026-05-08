@@ -61,7 +61,7 @@ function Profile() {
             </button>
           </div>
 
-          <p className="text-xs text-secondary-content -mt-6">
+          <p className="text-xs -mt-6">
             Click on camera icon to upload your profile pic
           </p>
         </div>

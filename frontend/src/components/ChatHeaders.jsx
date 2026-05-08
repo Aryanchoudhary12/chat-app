@@ -16,7 +16,7 @@ function ChatHeaders() {
           />
           <div className="flex flex-col justify-center item-start">
             <h1 className="font-medium text-base text-warning">{selectedUser.fullname}</h1>
-            <p className="text-sm text-gray-400">{onlineUsers.includes(selectedUser._id) ? "Online" : "Offline"}</p>
+            <p className="text-sm text-gray-400">{onlineUsers.flat().includes(selectedUser._id) ? "Online" : "Offline"}</p>
           </div>
         </div>
         <button onClick={()=>setSelectedUser(null)}>

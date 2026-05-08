@@ -4,20 +4,38 @@ import { useAuthStore } from "../store/useAuthStore";
 import { useEffect, useState } from "react";
 import ChatHeaders from "./ChatHeaders";
 import MessageInput from "./MessageInput";
+import { useRef } from "react";
 function Chat() {
-  const { messages, getMessages, isMessageLoading, selectedUser } =
-    useChatStore();
+  const {
+    messages,
+    getMessages,
+    isMessageLoading,
+    selectedUser,
+    subscribeToMessages,
+    unSubscribeFromMessages,
+  } = useChatStore();
   const { authUser } = useAuthStore();
 
   useEffect(() => {
     getMessages(selectedUser._id);
-  }, [selectedUser._id, getMessages]);
-  console.log(selectedUser._id);
-
+    subscribeToMessages();
+    return () => unSubscribeFromMessages();
+  }, [
+    selectedUser._id,
+    getMessages,
+    subscribeToMessages,
+    unSubscribeFromMessages,
+  ]);
+  const messageRef = useRef();
+  useEffect(() => {
+    if (messageRef.current && messages) {
+      messageRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
   if (isMessageLoading)
     return (
       <div className="flex flex-col justify-center items-center w-full h-full">
-        <span class="loading loading-dots loading-xl"></span>
+        <span className="loading loading-dots loading-xl"></span>
         <p>Loading ...</p>
       </div>
     );
@@ -32,6 +50,7 @@ function Chat() {
               className={`chat ${
                 message.senderId == authUser._id ? "chat-end" : "chat-start"
               }`}
+              ref={messageRef}
             >
               <div className="chat-image avatar">
                 <div className="size-10 rounded-full border object-cover">
